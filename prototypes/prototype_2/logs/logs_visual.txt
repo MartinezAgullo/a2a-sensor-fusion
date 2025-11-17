@@ -1,0 +1,15 @@
+INFO:     Started server process [62702]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8002 (Press CTRL+C to quit)
+🚀 Starting Visual Agent on port 8002...
+INFO:     127.0.0.1:52462 - "GET / HTTP/1.1" 200 OK
+
+[Visual Agent | A2A Server] 👁️  Received Task ID d5a378b2...
+[Visual Agent] Sector: Alpha Sector
+[Visual Agent] ✓ Classification: AIRCRAFT (93% certain)
+INFO:     127.0.0.1:52466 - "POST /process_task HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [62702]
