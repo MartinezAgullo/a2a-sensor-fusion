@@ -2,10 +2,12 @@
 Shared Data Models for A2A and MCP Communication
 ================================================
 Defines all Pydantic models used across the multi-agent system.
+
+Added AgentCard, AgentSkill for A2A Discovery
 """
 
 from pydantic import BaseModel, Field
-from typing import Literal
+from typing import Literal, List, Dict, Optional
 import uuid
 
 
@@ -106,3 +108,141 @@ class A2AArtifact(BaseModel):
                 "summary": "Track successful for Sector Alpha. Found 1 target."
             }
         }
+
+
+# ============================================================================
+# A2A AGENT DISCOVERY (Phase 2 Addition)
+# ============================================================================
+
+class AgentSkill(BaseModel):
+    """
+    Describes a specific capability that an agent can perform.
+    Enables dynamic discovery and capability validation.
+    """
+    id: str = Field(..., description="Unique skill identifier")
+    name: str = Field(..., description="Human-readable skill name")
+    description: str = Field(..., description="What this skill does")
+    input_format: str = Field(..., description="Expected input data type")
+    output_format: str = Field(..., description="Provided output data type")
+    tags: List[str] = Field(default_factory=list, description="Searchable tags")
+    examples: List[str] = Field(default_factory=list, description="Example use cases")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "radar_detection",
+                "name": "Radar Target Detection",
+                "description": "Provides range and azimuth for targets in specified sector",
+                "input_format": "A2ATask",
+                "output_format": "RadarData",
+                "tags": ["radar", "sensor", "tracking"],
+                "examples": ["Track target in Alpha Sector", "Scan Beta quadrant"]
+            }
+        }
+
+
+class AgentCapabilities(BaseModel):
+    """
+    Describes technical capabilities and performance characteristics of an agent.
+    """
+    streaming: bool = Field(default=False, description="Supports streaming responses")
+    batch_processing: bool = Field(default=False, description="Can process multiple tasks")
+    cancellable: bool = Field(default=False, description="Tasks can be cancelled")
+    max_concurrent_tasks: int = Field(default=1, description="Maximum parallel tasks")
+    average_response_time_ms: float = Field(default=100, description="Typical response time")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "streaming": False,
+                "batch_processing": False,
+                "max_concurrent_tasks": 10,
+                "average_response_time_ms": 50
+            }
+        }
+
+
+class AgentCard(BaseModel):
+    """
+    Agent Card - Complete metadata about an agent for discovery.
+    Enables dynamic agent discovery, capability negotiation, and service registration.
+    
+    This is the A2A equivalent of OpenAPI spec but for agents.
+    """
+    name: str = Field(..., description="Agent name")
+    description: str = Field(..., description="What this agent does")
+    url: str = Field(..., description="Base URL for agent endpoints")
+    version: str = Field(..., description="Agent version (semver)")
+    
+    # Capabilities
+    skills: List[AgentSkill] = Field(..., description="List of skills this agent provides")
+    capabilities: AgentCapabilities = Field(
+        default_factory=AgentCapabilities,
+        description="Technical capabilities"
+    )
+    
+    # Communication
+    default_input_modes: List[str] = Field(
+        default=["application/json"], 
+        description="Supported input content types"
+    )
+    default_output_modes: List[str] = Field(
+        default=["application/json"],
+        description="Supported output content types"
+    )
+    
+    # Metadata
+    author: Optional[str] = Field(default=None, description="Agent developer")
+    tags: List[str] = Field(default_factory=list, description="Agent categories")
+    
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "name": "Radar Sensor Agent",
+                "description": "Provides radar-based target tracking in polar coordinates",
+                "url": "http://localhost:8001",
+                "version": "1.0.0",
+                "skills": [],
+                "capabilities": {
+                    "streaming": False,
+                    "batch_processing": False,
+                    "max_concurrent_tasks": 10,
+                    "average_response_time_ms": 50
+                },
+                "author": "Defense Systems Lab",
+                "tags": ["sensor", "radar", "defense"]
+            }
+        }
+
+
+class AgentRegistry(BaseModel):
+    """
+    Registry of available agents for dynamic discovery.
+    The Fusion Agent can query this to find available sensors.
+    """
+    agents: Dict[str, AgentCard] = Field(
+        default_factory=dict,
+        description="Map of agent_id to AgentCard"
+    )
+    
+    def register_agent(self, agent_id: str, card: AgentCard) -> None:
+        """Register a new agent in the registry"""
+        self.agents[agent_id] = card
+    
+    def find_agents_by_skill(self, skill_id: str) -> List[AgentCard]:
+        """Find all agents that provide a specific skill"""
+        return [
+            card for card in self.agents.values()
+            if any(skill.id == skill_id for skill in card.skills)
+        ]
+    
+    def find_agents_by_tag(self, tag: str) -> List[AgentCard]:
+        """Find all agents with a specific tag"""
+        return [
+            card for card in self.agents.values()
+            if tag in card.tags or any(tag in skill.tags for skill in card.skills)
+        ]
+    
+    def get_agent(self, agent_id: str) -> Optional[AgentCard]:
+        """Get a specific agent by ID"""
+        return self.agents.get(agent_id)

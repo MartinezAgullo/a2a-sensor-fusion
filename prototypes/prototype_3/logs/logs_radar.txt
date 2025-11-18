@@ -1,0 +1,16 @@
+INFO:     Started server process [67102]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+🚀 Starting Radar Agent on port 8001...
+INFO:     127.0.0.1:56017 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56021 - "GET /card HTTP/1.1" 200 OK
+
+[Radar Agent | A2A Server] 📡 Received Task ID 93f823fa...
+[Radar Agent] Sector: Alpha Sector
+[Radar Agent] ✓ Generated reading: 2507.6m @ 116.8°
+INFO:     127.0.0.1:56025 - "POST /process_task HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67102]

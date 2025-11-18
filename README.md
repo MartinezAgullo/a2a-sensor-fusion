@@ -21,7 +21,7 @@ cd prototype_2/
 python python sensor_visual_server.py
 ```
 
-Execute client:s
+Execute clients:
 ```bash
 # Terminal 3
 source .venv/bin/activate
