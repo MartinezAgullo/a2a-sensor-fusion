@@ -1,8 +1,12 @@
 # A2A Sensor Fusion
 
+Proof-of-concept project centered around Agent-to-Agent (A2A) communication for a defense-oriented application. The objective is to demonstrate key capabilities of a multi-agent system, specifically integrating an A2A orchestration layer with an internal Model Context Protocol (MCP) service for data standardization.
+
 ## Prototype 1
 
 **Prototype 1**: Notebook-based version. This code simulates a sensor fusion system where a **Fusion Agent** orchestrates an **Agent-to-Agent (A2A) Task** to retrieve raw data from two simulated **Sensor Agents** (`Radar` and `Visual`), normalizes that data using a local **Model Context Protocol (MCP)** function, and produces a final standardized **A2A Artifact** (report).
+
+---
 
 ## Prototype 2
 
@@ -52,6 +56,8 @@ cd prototype_2/
 source run_system.sh 
 ```
 
+---
+
 ## Prototype 3
 
 **Prototype 3**: Enhancements:
@@ -63,3 +69,23 @@ source .venv/bin/activate
 cd prototype_3/
 source run_system.sh 
 ```
+At this stage non of the scripts is using LLMs. The MCP [server](prototypes/prototype_3/mcp_server.py) only exposes two deterministic tools:
+
+
+-   `normalize_sensor_data` → math transforms (polar → Cartesian, weighting confidence)
+
+-   `validate_sensor_data` → rule-based quality checks
+
+
+And the MCP [client](prototypes/prototype_3/mcp_client.py) simply calls those tools.
+
+Similarly, neither the fusion agents nor the sensor agents use LLMs.
+
+---
+
+## Prototype 4
+
+**Prototype 4**:
+
+
+...

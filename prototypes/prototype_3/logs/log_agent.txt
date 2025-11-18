@@ -1,0 +1,113 @@
+
+🚀 Starting Autonomous Sensor Fusion Agent System
+==================================================
+
+📡 Starting Radar Agent (Port 8001)...
+[2] 73389
+👁️  Starting Visual Agent (Port 8002)...
+[3] 73443
+
+✅ Checking server health...
+   ✓ Radar Agent operational
+   ✓ Visual Agent operational
+
+🎯 Running Fusion Agent...
+==================================================
+
+======================================================================
+🔍 AGENT DISCOVERY PHASE
+======================================================================
+
+[Discovery] Querying Radar Agent at http://localhost:8001/card...
+[Discovery] ✓ Radar Sensor Agent v1.0.0
+[Discovery]   Skills: Radar Target Detection
+
+[Discovery] Querying Visual Agent at http://localhost:8002/card...
+[Discovery] ✓ Visual Sensor Agent v1.0.0
+[Discovery]   Skills: Visual Target Classification
+
+[Discovery] 📊 Discovery Complete: 2 agents registered
+======================================================================
+
+======================================================================
+🎯 FUSION AGENT ORCHESTRATION STARTING
+======================================================================
+
+[Fusion Agent] 📤 Sending A2A Tasks to Sensor Agents...
+[Fusion Agent] Task ID: 0122c5db-2d3c-4cf6-8a6b-519710ae05de
+[Fusion Agent] Target Sector: Alpha Sector
+
+[Fusion Agent] → Contacting Radar Agent (Port 8001)...
+[Fusion Agent] → Contacting Visual Agent (Port 8002)...
+
+[Fusion Agent] ✅ Received raw data from both sensors
+[Fusion Agent] Radar: 1239.8m @ 359.4°
+[Fusion Agent] Visual: DRONE (74%)
+
+[Fusion Agent] 🔄 Transitioning to MCP Client...
+[MCP Client] 🚀 Connecting to MCP server at /Users/pablo/Desktop/Scripts/a2a-fusion-prototype/prototypes/prototype_3/mcp_server.py...
+[MCP Client] ✅ MCP client initialized and ready
+
+[MCP Client] 🔍 Calling MCP tool 'validate_sensor_data'...
+[11/18/25 17:58:42] INFO     Processing request of type CallToolRequest                                       server.py:674
+                    INFO     Processing request of type ListToolsRequest                                      server.py:674
+[MCP Client] Quality Score: 100.0/100
+[MCP Client] Recommendation: ACCEPT
+
+[MCP Client] 🔧 Calling MCP tool 'normalize_sensor_data'...
+                    INFO     Processing request of type CallToolRequest                                       server.py:674
+[MCP Client] ✓ Normalized position: (1239.73, -12.98) meters
+[MCP Client] ✓ Confidence: 0.74
+[MCP Client] ✓ Target type: DRONE
+[MCP Client] 🛑 Shutting down MCP client...
+[MCP Client] ✅ MCP client stopped
+
+[Fusion Agent] ✅ Successfully generated Final A2A Artifact
+
+
+######################################################################
+🚀 FINAL A2A ARTIFACT (Fusion Report)
+######################################################################
+{
+  "fusion_id": "RPT-4e6206ff",
+  "targets": [
+    {
+      "x_pos": 1239.73,
+      "y_pos": -12.98,
+      "target_type": "DRONE",
+      "confidence": 0.74
+    }
+  ],
+  "summary": "Track successful for Alpha Sector. Detected 1 DRONE target at position (1239.73, -12.98) with 74% confidence."
+}
+
+----------------------------------------------------------------------
+📊 TARGET DATA SUMMARY
+----------------------------------------------------------------------
+Target Type:      DRONE
+Confidence:       74.00%
+Position (X, Y):  (1239.73m, -12.98m)
+Fusion Report ID: RPT-4e6206ff
+
+----------------------------------------------------------------------
+🔍 DISCOVERED AGENTS
+----------------------------------------------------------------------
+Radar Sensor Agent v1.0.0
+  URL: http://localhost:8001
+  Skills: radar_detection
+Visual Sensor Agent v1.0.0
+  URL: http://localhost:8002
+  Skills: visual_classification
+----------------------------------------------------------------------
+
+
+🛑 Shutting down agents...
+✅ All agents stopped
+
+📋 Server logs available in:
+   - logs/logs_radar.txt
+   - logs/logs_visual.txt
+(.venv) pablo@MacBook-Pro prototype_3 % 
+[3]  + terminated  python sensor_visual_server.py > logs/logs_visual.txt 2>&1
+(.venv) pablo@MacBook-Pro prototype_3 % 
+[2]  + terminated  python sensor_radar_server.py > logs/logs_radar.txt 2>&1
