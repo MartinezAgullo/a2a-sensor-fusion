@@ -1,0 +1,20 @@
+INFO:     Started server process [80168]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+[Radar Agent] Initialized - Sensor ID: RADAR-001
+
+======================================================================
+🚀 PROTOTYPE 4: RADAR AGENT (Full A2A SDK)
+======================================================================
+Agent: Radar Sensor Agent
+Version: 2.0.0
+Port: 8001
+Streaming: True
+======================================================================
+
+INFO:     127.0.0.1:65278 - "GET /.well-known/ai-agent.json HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [80168]

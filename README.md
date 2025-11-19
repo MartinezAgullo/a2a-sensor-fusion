@@ -86,6 +86,12 @@ Similarly, neither the fusion agents nor the sensor agents use LLMs.
 ## Prototype 4
 
 **Prototype 4**:
+Core Changes:
 
+* AgentExecutor - Structured agent execution pattern
+* EventQueue - Event-based communication (supports streaming)
+* A2AStarletteApplication - Official A2A server wrapper
+* A2AClient - Official A2A client for Fusion Agent
+* Task Store - Persistent task tracking
 
 ...
